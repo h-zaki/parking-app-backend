@@ -6,7 +6,14 @@
 
 
 model Parking {
-  id        Int      @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
+  name          String
+  emptyBlocks   Int
+  city          String
+  price         Int
+  adress        String
+  description   String
+  img           String
 }
 
 
