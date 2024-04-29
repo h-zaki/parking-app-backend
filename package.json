@@ -1,0 +1,19 @@
+{
+  "name": "projet_backend",
+  "version": "1.0.0",
+  "description": "parking_app_backend",
+  "main": "parkingBackend.js",
+  "scripts": {
+    "dev": "node app.js"
+  },
+  "keywords": [
+    "parking"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^5.13.0",
+    "express": "^4.19.2",
+    "prisma": "^5.13.0"
+  }
+}
