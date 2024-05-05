@@ -39,8 +39,8 @@ app.get('/parking', async (req, res) => {
       });
     res.status(200).send(parkings);
   }
-  catch {
-    res.status(500).send({"message": "an error occured"})
+  catch(error) {
+    res.status(500).send({"message": error.message})
   }
 
 });
@@ -62,6 +62,61 @@ app.get('/parking/:id', async (req, res) => {
   }
 
 });
+
+
+// create reservation
+app.post('/reservation', async (req, res) => {
+  const { parking, reservationTime } = req.body;
+  console.log(reservationTime);
+  parkId = parking.id
+  const resTime = new Date(reservationTime);
+  try {
+    
+    const reservation = await prisma.reservation.create({
+      data: {
+        parkId,
+        reservationTime : resTime,
+        userId: 1,
+      }
+    });
+    res.status(201).json({ message: 'Reservation created', id: reservation.id});
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    console.log(error.message);
+  }
+});
+
+//get reservations
+app.get('/reservation', async (req, res) => {
+  try{
+    const reservations = await prisma.reservation.findMany();
+
+    res.status(200).json({ reservations });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    
+  }
+});
+
+
+app.delete('/reservation/:id', async (req, res) => {
+  try{
+    const id = parseInt(req.params.id);
+    await prisma.reservation.delete({
+      where: {
+        id 
+      }
+    });
+
+    res.status(200).json({ message: 'Reservation deleted' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    
+  }
+});
+
+
+
 
 
 // Endpoint d'inscription
@@ -95,7 +150,7 @@ app.post('/login', async (req, res) => {
   }
 
   const token = jwt.sign({ userId: user.id }, 'your-secret-key');
-  res.json({ token });
+  res.json({ username:user.username, token });
 });
 
 

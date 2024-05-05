@@ -14,15 +14,28 @@ model Parking {
   adress        String
   description   String
   img           String
+
+  reservations  Reservation[]
 }
 
 model User {
   id_user       Int      @id @default(autoincrement())
-  username String
-  email    String   @unique
-  password String
+  username      String
+  email         String   @unique
+  password      String
+  reservations  Reservation[] 
 }
 
+
+model Reservation {
+  id            Int      @id @default(autoincrement())
+  userId        Int      
+  parkId        Int
+  reservationTime     DateTime 
+
+  user    User      @relation(fields: [userId], references: [id_user])
+  parking Parking   @relation(fields: [parkId], references: [id])
+}
 
 
 
