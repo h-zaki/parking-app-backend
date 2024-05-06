@@ -66,8 +66,8 @@ app.get('/parking/:id', async (req, res) => {
 
 // create reservation
 app.post('/reservation', async (req, res) => {
-  const { parking, reservationTime } = req.body;
-  console.log(reservationTime);
+  const { parking, reservationTime,userId } = req.body;
+  console.log({ parking, reservationTime,userId });
   parkId = parking.id
   const resTime = new Date(reservationTime);
   try {
@@ -76,7 +76,7 @@ app.post('/reservation', async (req, res) => {
       data: {
         parkId,
         reservationTime : resTime,
-        userId: 1,
+        userId,
       }
     });
     res.status(201).json({ message: 'Reservation created', id: reservation.id});
@@ -150,7 +150,7 @@ app.post('/login', async (req, res) => {
   }
 
   const token = jwt.sign({ userId: user.id }, 'your-secret-key');
-  res.json({ username:user.username, token });
+  res.json({ username:user.username, id : user.id_user, token });
 });
 
 
