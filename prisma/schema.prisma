@@ -46,5 +46,5 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url      = env("MYSQL_ADDON_URI")
 }
