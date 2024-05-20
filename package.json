@@ -2,9 +2,10 @@
   "name": "projet_backend",
   "version": "1.0.0",
   "description": "parking_app_backend",
-  "main": "parkingBackend.js",
+  "main": "app.js",
   "scripts": {
-    "dev": "node app.js"
+    "dev": "node app.js",
+    "install": "npx prisma migrate deploy"
   },
   "keywords": [
     "parking"
