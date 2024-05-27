@@ -27,7 +27,9 @@ app.use('/images', express.static('Images'));
 
 //get all parkings
 app.get('/parking', async (req, res) => {
+  const limit = parseInt(req.query.limit) || 50;
   try{
+
     const parkings = await prisma.parking.findMany({
         select: {
           id: true,
@@ -35,11 +37,13 @@ app.get('/parking', async (req, res) => {
           city: true,
           price: true,
           img: true,
-        }
+        },
+        take: limit
       });
     res.status(200).send(parkings);
   }
   catch(error) {
+    console.log(error.message);
     res.status(500).send({"message": error.message})
   }
 
@@ -66,16 +70,16 @@ app.get('/parking/:id', async (req, res) => {
 
 // create reservation
 app.post('/reservation', async (req, res) => {
-  const { parking, reservationTime,userId } = req.body;
-  console.log({ parking, reservationTime,userId });
+  const { parking, arrivalTime,userId, duration } = req.body;
   parkId = parking.id
-  const resTime = new Date(reservationTime);
+  const resTime = new Date(arrivalTime);
   try {
     
     const reservation = await prisma.reservation.create({
       data: {
         parkId,
-        reservationTime : resTime,
+        arrivalTime : resTime,
+        duration,
         userId,
       }
     });
@@ -85,6 +89,26 @@ app.post('/reservation', async (req, res) => {
     console.log(error.message);
   }
 });
+
+
+app.put('/reservation', async (req,res)=>{
+  const { id, duration } = req.body;
+
+  try {
+    
+    const reservation = await prisma.reservation.update({
+      data: {
+        payee : true,
+        duration: parseInt(duration),
+      },
+      where : { id: parseInt(id) }
+    });
+    res.status(201).json({ message: 'Reservation edited', id: reservation.id});
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    console.log(error.message);
+  }
+})
 
 //get reservations
 app.get('/reservation', async (req, res) => {
