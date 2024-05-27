@@ -6,17 +6,20 @@
 
 
 model Parking {
-  id            Int      @id @default(autoincrement())
-  name          String
-  emptyBlocks   Int
-  city          String
-  price         Int
-  adress        String
-  description   String
-  img           String
+  id          Int       @id @default(autoincrement())
+  name        String
+  emptyBlocks Int
+  city        String
+  price       Int
+  address     String
+  description String
+  img         String
+  latitude    Float
+  longitude   Float
 
-  reservations  Reservation[]
+  reservations Reservation[]
 }
+
 
 model User {
   id_user       Int      @id @default(autoincrement())
