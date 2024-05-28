@@ -185,3 +185,36 @@ const port = 8080;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+
+
+
+
+
+// app.get('/parkings/nearby', async (req, res) => {
+//   const { latitude, longitude, radius } = req.query;
+  
+//   if (!latitude || !longitude || !radius) {
+//     return res.status(400).send({ message: 'Latitude, longitude and radius are required' });
+//   }
+  
+//   try {
+//     const parkings = await prisma.$queryRaw`
+//       SELECT *, (
+//         6371 * acos(
+//           cos(radians(${parseFloat(latitude)})) *
+//           cos(radians(latitude)) *
+//           cos(radians(longitude) - radians(${parseFloat(longitude)})) +
+//           sin(radians(${parseFloat(latitude)})) *
+//           sin(radians(latitude))
+//         )
+//       ) AS distance
+//       FROM Parking
+     
+//     `;
+//     res.status(200).json(parkings);
+//   } catch (error) {
+//     console.error('Error executing SQL query:', error);
+//     res.status(500).json({ message: error.message });
+//   }
+// });
