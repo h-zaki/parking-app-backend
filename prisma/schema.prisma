@@ -14,8 +14,8 @@ model Parking {
   adress        String
   description   String
   img           String
-  lat           Float     @default(1.0)
-  lon           Float     @default(1.0)
+  latitude           Float     @default(1.0)
+  longitude           Float     @default(1.0)
 
   reservations  Reservation[]
 }

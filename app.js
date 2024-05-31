@@ -37,6 +37,8 @@ app.get('/parking', async (req, res) => {
           city: true,
           price: true,
           img: true,
+          latitude:true,
+          longitude:true,
         },
         take: limit
       });
