@@ -139,6 +139,20 @@ app.delete('/reservation/:id', async (req, res) => {
   }
 });
 
+// Check if email exists
+app.post('/check-email', async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    const emailExists = !!existingUser;
+
+    res.json({ exists: emailExists });
+  } catch (error) {
+    console.error('Error checking email:', error);
+    res.status(500).json({ error: 'An error occurred', details: error.message });
+  }
+});
 
 
 
