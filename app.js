@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 
 
 
+
 // Creating an Express application
 const app = express();
 
@@ -41,7 +42,8 @@ app.get('/parking', async (req, res) => {
         CALL get_most_reserved_parks(${limit});
     `
 
-    res.status(200).send(parkings);
+    
+    res.status(200).send(parkings.map(p => fields(p)));
   }
   catch(error) {
     console.log(error.message);
@@ -193,68 +195,30 @@ app.post('/login', async (req, res) => {
 });
 
 
-// Get parkings near current location
-/*app.get('/parkingMap', async (req, res) => {
-  const { lat, lng, radius } = req.query;
-  const latitude = parseFloat(lat);
-  const longitude = parseFloat(lng);
-  const radiusInMeters = parseFloat(radius) || 5000; // default to 5 km radius if not specified
 
-  try {
-    const parkings = await prisma.$queryRaw`
-      SELECT *, (
-        6371000 * acos(
-          cos(radians(${latitude})) *
-          cos(radians(latitude)) *
-          cos(radians(longitude) - radians(${longitude})) +
-          sin(radians(${latitude})) *
-          sin(radians(latitude))
-        )
-      ) AS distance
-      FROM Parking
-      HAVING distance < ${radiusInMeters}
-      ORDER BY distance
-    `;
 
-    res.status(200).send(parkings);
-  } catch (error) {
-    res.status(500).send({ message: error.message });
-  }
-});*/
+const fields = (parking) =>
+  {
 
-// Endpoint pour obtenir les parkings à proximité
-app.get('/parkings/nearby', async (req, res) => {
-  const { latitude, longitude, radius } = req.query;
-  
-  if (!latitude || !longitude || !radius) {
-    return res.status(400).send({ message: 'Latitude, longitude and radius are required' });
+    const switchedObj = 
+    {
+      id: parking.f0,
+      name: parking.f1,
+      city: parking.f2,
+      price: parking.f3,
+      img: parking.f4,
+      latitude: parking.f5,
+      longitude: parking.f6
+    };
+    return switchedObj;
   }
-  
-  try {
-    const parkings = await prisma.$queryRaw`
-      SELECT *, (
-        6371 * acos(
-          cos(radians(${parseFloat(latitude)})) *
-          cos(radians(latitude)) *
-          cos(radians(longitude) - radians(${parseFloat(longitude)})) +
-          sin(radians(${parseFloat(latitude)})) *
-          sin(radians(latitude))
-        )
-      ) AS distance
-      FROM Parking
-     
-    `;
-    res.status(200).json(parkings);
-  } catch (error) {
-    console.error('Error executing SQL query:', error);
-    res.status(500).json({ message: error.message });
-  }
-});
+
 
 
 
 // Starting the server
 const port = 8080; 
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
