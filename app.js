@@ -31,14 +31,14 @@ app.get('/parking', async (req, res) => {
   const longitude = parseInt(req.query.longitude);
   const latitude = parseInt(req.query.latitude);
   try{
-    const parking =  (longitude && latitude )?
+    const parkings =  (longitude && latitude )?
     
     await prisma.$queryRaw`
         CALL get_closest_parks(${longitude}, ${latitude}, ${limit});
     `
     :
     await prisma.$queryRaw`
-        CALL get_closest_parks(${limit});
+        CALL get_most_reserved_parks(${limit});
     `
 
     res.status(200).send(parkings);
