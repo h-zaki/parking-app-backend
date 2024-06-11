@@ -28,20 +28,19 @@ app.use('/images', express.static('Images'));
 //get all parkings
 app.get('/parking', async (req, res) => {
   const limit = parseInt(req.query.limit) || 50;
+  const longitude = parseInt(req.query.longitude);
+  const latitude = parseInt(req.query.latitude);
   try{
+    const parking =  (longitude && latitude )?
+    
+    await prisma.$queryRaw`
+        CALL get_closest_parks(${longitude}, ${latitude}, ${limit});
+    `
+    :
+    await prisma.$queryRaw`
+        CALL get_closest_parks(${limit});
+    `
 
-    const parkings = await prisma.parking.findMany({
-        select: {
-          id: true,
-          name: true,
-          city: true,
-          price: true,
-          img: true,
-          latitude:true,
-          longitude:true,
-        },
-        take: limit
-      });
     res.status(200).send(parkings);
   }
   catch(error) {
